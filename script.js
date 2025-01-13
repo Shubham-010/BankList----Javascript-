@@ -61,37 +61,48 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-
 // ----------Code-----------
 
-const displaymovements = function(movements){
+const displaymovements = function (movements) {
+  containerMovements.innerHTML = ''; //   ---------------------------    Clear previous Reords
 
-
-  containerMovements.innerHTML = '' ;   //   ---------------------------    Clear previous Reords
-
-  movements.forEach((mov,i) => {
-    const type = mov > 0 ? 'deposit' : 'withdrawal'
-      const html = `
+  movements.forEach((mov, i) => {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+          <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
           <div class="movements__value">${mov}</div>
         </div>
-      `    
+      `;
     containerMovements.insertAdjacentHTML('afterbegin', html); // ------------To add Html content inside movement
-// ------------insertAdjacentHTML ---------------------------
-// < !--beforebegin -->
-//  <p>
-//    <!-- afterbegin -->
-//    foo
-//    <!-- beforeend -->
-//  </p>
-// <!--afterend -->
-// ---------------------------------------
+    // ------------insertAdjacentHTML ---------------------------
+    // < !--beforebegin -->
+    //  <p>
+    //    <!-- afterbegin -->
+    //    foo
+    //    <!-- beforeend -->
+    //  </p>
+    // <!--afterend -->
+    // ---------------------------------------
   });
 
+  const createuserName = function (accs) {
+    accs.forEach(acc => {
+      acc.userName = acc.owner;
+      const userName = user
+        .toLowerCase()
+        .split('')
+        .map(name => name[0])
+        .join('');
+      return userName;
+    });
 
-}
-displaymovements(account1.movements)
+    createuserName(accounts);
+  };
+};
+displaymovements(account1.movements);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -105,11 +116,9 @@ displaymovements(account1.movements)
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const converate = 1.1;
-const resultdata = movements.map(function (mov,i) {
-  return mov * converate
-})
+const resultdata = movements.map(function (mov, i) {
+  return mov * converate;
+});
 console.log('resultdata :>> ', resultdata);
-
-
 
 /////////////////////////////////////////////////
