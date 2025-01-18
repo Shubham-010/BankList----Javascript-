@@ -7,7 +7,7 @@
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
-  username:'js',
+  username: 'js',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -56,6 +56,7 @@ const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
 const btnSort = document.querySelector('.btn--sort');
+const logOut = document.querySelector('.form__btn--logout');
 
 const inputLoginUsername = document.querySelector('.login__input--user');
 const inputLoginPin = document.querySelector('.login__input--pin');
@@ -74,9 +75,8 @@ const displaymovements = function (movements) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${
-      i + 1
-    } ${type}</div>
+          <div class="movements__type movements__type--${type}">${i + 1
+      } ${type}</div>
           <div class="movements__value">${mov} 💶</div>
         </div>
       `;
@@ -108,9 +108,9 @@ const displaymovements = function (movements) {
 };
 
 
-const displaySummary = (movements) =>{
-  const resultValDep = movements.reduce((mov,cur)=> (mov > 0) ? mov + cur : mov);
-  const resultValWithD = movements.reduce((mov,cur)=> (mov < 0) ? mov + cur : mov);
+const displaySummary = (movements) => {
+  const resultValDep = movements.reduce((mov, cur) => (mov > 0) ? mov + cur : mov);
+  const resultValWithD = movements.reduce((mov, cur) => (mov < 0) ? mov + cur : mov);
   const resultValWithInt = (movements.reduce((mov, cur, i, arr) => mov + cur)) / movements.length;
   labelSumIn.textContent = `${resultValDep} 💶`;
   labelSumOut.textContent = `${resultValWithD} 💶`;
@@ -118,30 +118,42 @@ const displaySummary = (movements) =>{
 
 };
 
-const calDisBalance = (movements)=>{
-  labelBalance.textContent = movements.reduce((mov,cur)=> mov+cur);
+const calDisBalance = (movements) => {
+  labelBalance.textContent = movements.reduce((mov, cur) => mov + cur);
 };
 
 // ----------Login Validation---------------------------
 let currentAccount;
 
-btnLogin.addEventListener('click',function (e){
+btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value)
   console.log('currentAccount :>> ', currentAccount);
-  if(currentAccount?.pin === Number(inputLoginPin.value)){
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
     //Display UI and Message
     labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = 100;
 
+    //Clear input fields
+    inputLoginUsername.value = inputLoginPin.value = "";
+    inputLoginPin.blur();
+
     //Display movements
     displaymovements(currentAccount.movements);
+
     //Display balance
     calDisBalance(currentAccount.movements);
+
     //Display summary
     displaySummary(currentAccount.movements);
 
   }
+})
+
+logOut.addEventListener('click',()=>{
+  containerApp.style.opacity = 0;
+  inputLoginUsername.value = inputLoginPin.value = "";
+  inputLoginUsername.focus();
 })
 
 // -------------------------------------
