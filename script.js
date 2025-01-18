@@ -7,6 +7,7 @@
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
+  username:'js',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -14,6 +15,7 @@ const account1 = {
 
 const account2 = {
   owner: 'Jessica Davis',
+  username: 'jd',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
@@ -21,6 +23,7 @@ const account2 = {
 
 const account3 = {
   owner: 'Steven Thomas Williams',
+  username: 'sw',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
@@ -28,6 +31,7 @@ const account3 = {
 
 const account4 = {
   owner: 'Sarah Smith',
+  username: 'ss',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -73,7 +77,7 @@ const displaymovements = function (movements) {
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__value">${mov}</div>
+          <div class="movements__value">${mov} 💶</div>
         </div>
       `;
     containerMovements.insertAdjacentHTML('afterbegin', html); // ------------To add Html content inside movement
@@ -102,9 +106,48 @@ const displaymovements = function (movements) {
     createuserName(accounts);
   };
 };
-displaymovements(account1.movements);
 
-/////////////////////////////////////////////////
+
+const displaySummary = (movements) =>{
+  const resultValDep = movements.reduce((mov,cur)=> (mov > 0) ? mov + cur : mov);
+  const resultValWithD = movements.reduce((mov,cur)=> (mov < 0) ? mov + cur : mov);
+  const resultValWithInt = (movements.reduce((mov, cur, i, arr) => mov + cur)) / movements.length;
+  labelSumIn.textContent = `${resultValDep} 💶`;
+  labelSumOut.textContent = `${resultValWithD} 💶`;
+  labelSumInterest.textContent = `${resultValWithInt} 💶`;
+
+};
+
+const calDisBalance = (movements)=>{
+  labelBalance.textContent = movements.reduce((mov,cur)=> mov+cur);
+};
+
+// ----------Login Validation---------------------------
+let currentAccount;
+
+btnLogin.addEventListener('click',function (e){
+  e.preventDefault();
+  currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value)
+  console.log('currentAccount :>> ', currentAccount);
+  if(currentAccount?.pin === Number(inputLoginPin.value)){
+    //Display UI and Message
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+    containerApp.style.opacity = 100;
+
+    //Display movements
+    displaymovements(currentAccount.movements);
+    //Display balance
+    calDisBalance(currentAccount.movements);
+    //Display summary
+    displaySummary(currentAccount.movements);
+
+  }
+})
+
+// -------------------------------------
+
+
+////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
 
