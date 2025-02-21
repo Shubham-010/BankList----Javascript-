@@ -246,6 +246,18 @@ h2 {
 .form__label--loan {
   grid-row: 2;
 }
+.form__btn--arrow{
+  border: none;
+  border-radius: 0.7rem;
+  font-size: 1.8rem;
+  width: 20%;
+  background-color: #b6ccdf;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.form__btn--arrow:active{
+  border: solid black  ;
+}
 /* End exceptions */
 
 .form__input {

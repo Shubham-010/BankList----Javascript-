@@ -65,6 +65,7 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
+const test = document.querySelector('.test');
 
 // ----------Code-----------
 
@@ -118,8 +119,9 @@ const displaySummary = (movements) => {
 
 };
 
-const calDisBalance = (movements) => {
-  labelBalance.textContent = movements.reduce((mov, cur) => mov + cur);
+const calDisBalance = (acct) => {
+  acct.balance = acct.movements.reduce((mov, cur) => mov + cur , 0);
+  labelBalance.textContent = `${acct.balance}`
 };
 
 // ----------Login Validation---------------------------
@@ -142,15 +144,28 @@ btnLogin.addEventListener('click', function (e) {
     displaymovements(currentAccount.movements);
 
     //Display balance
-    calDisBalance(currentAccount.movements);
+    calDisBalance(currentAccount);
 
     //Display summary
     displaySummary(currentAccount.movements);
 
   }
 })
+// -----------------------------------------------
 
-logOut.addEventListener('click',()=>{
+
+// -------------------transfer Btn----------------------------
+btnTransfer.addEventListener('click', (event) => {
+  event.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value)
+  console.log(amount, receiverAcc);
+  if(amount > 0 && currentAccount.balance >= amount && receiverAcc && receiverAcc?.username !== currentAccount.username ){
+    console.log('transferValid :>> ');
+  }
+})
+
+logOut.addEventListener('click', () => {
   containerApp.style.opacity = 0;
   inputLoginUsername.value = inputLoginPin.value = "";
   inputLoginUsername.focus();
@@ -175,5 +190,73 @@ const resultdata = movements.map(function (mov, i) {
   return mov * converate;
 });
 console.log('resultdata :>> ', resultdata);
+
+// function fiboN(num) {
+//   debugger
+//   let fib = [0,1];
+//   for (let i = 2; i < num; i++) {
+//    fib[i] = fib[i - 1] + fib[i - 2]
+//   }
+//   return fib.slice(0,num);
+// }
+// let num =  0;
+// let resul = fiboN(num);
+// console.log('fibo :>> ', resul); 
+
+
+//!Using method
+// let data =  'hello world!'
+// function reversestring(data) {
+//   let Ndata =  data.split(" ").reverse().join(" ");
+//   console.log('Ndata', Ndata)
+// }
+// reversestring(data);
+
+//!reverse Number
+// let data1 =  1234 +""
+// function reversenum(data1) {
+//   let Ndata1 =  data1.split("").reverse().join("");
+//   console.log('Ndata', Ndata1)
+// }
+// reversenum(data1);
+
+//!reverse number without converting to string 
+
+// let dataN =  1234;
+// function reversenumwithoutCon(dataN) {
+//   let reversed = 0;
+//   while(dataN !== 0){
+//     reversed = reversed * 10 + dataN % 10;
+//     dataN = Math.floor(dataN/10);
+//   }
+//   return reversed;
+
+// }
+
+//! Challenge Question 
+// let a = NaN;
+// let b = NaN;
+// console.log('first', Number.isNaN(a) == Number.isNaN(b))
+// console.log('first', a === b)
+
+//! Destructure Object
+// const obj = {a:'JS'};
+
+// const {a, a:b, a:c} = obj;
+// console.log('Object', a,b,c)
+
+//!Pre-post increment questions
+// let a = 10;
+// let b = a++;
+// let c = ++a;
+// let dataN = a + b + c;
+// console.log('a + b + c', a + b + c)
+
+console.log(3<8>2,'test')
+
+// let resdata =  reversenumwithoutCon(dataN);
+let resdata =  dataN;
+console.log('test', test)
+test.textContent = resdata;
 
 /////////////////////////////////////////////////
