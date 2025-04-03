@@ -69,8 +69,12 @@ const test = document.querySelector('.test');
 
 // ----------Code-----------
 
-const displaymovements = function (movements) {
+const displaymovements = function (movements, sort = false) {
+
   containerMovements.innerHTML = ''; //   ---------------------------    Clear previous Reords
+
+  const movs =  sort ? movements.slice().sort((a,b)=>{a -b}): movements;
+  console.log('movs :>> ', movs);
 
   movements.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
@@ -165,6 +169,17 @@ btnTransfer.addEventListener('click', (event) => {
   }
 })
 
+btnLoan.addEventListener('click',(event)=>{
+  event.preventDefault();
+  const amount = Math.floor(inputLoanAmount.value);
+
+  if(amount > 0 && currentAccount.movements.some(mov >= amount * 0.1)){
+    currentAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+})
+
 logOut.addEventListener('click', () => {
   containerApp.style.opacity = 0;
   inputLoginUsername.value = inputLoginPin.value = "";
@@ -203,7 +218,7 @@ console.log('resultdata :>> ', resultdata);
 // let resul = fiboN(num);
 // console.log('fibo :>> ', resul); 
 
-
+//TODO ------------------------------------------------
 //!Using method
 // let data =  'hello world!'
 // function reversestring(data) {
@@ -252,11 +267,42 @@ console.log('resultdata :>> ', resultdata);
 // let dataN = a + b + c;
 // console.log('a + b + c', a + b + c)
 
-console.log(3<8>2,'test')
+//!Precidence left to right
+// console.log(3<8>2,'test')  // output :- false
+// console.log(3>8<2,'test1') // output :- true
+
+
+//? Sorting arrays
+//! Works only for string
+// let arr = ['ram', 'aman','vishal','pratik'];
+// let dataN = arr.sort();
+
+//! For Number
+
+let arr = [10,-10,17,12,-20,450,500,475,1300,200,3000,450];
+//! Ascending Order
+// let dataN = arr.sort((a,b)=>{
+//   if(a>b) return 1;
+//   if(b>a) return -1;
+// });
+
+//!Descending Order
+// let dataN = arr.sort((a,b)=>{
+//   if(a>b) return -1;
+//   if(b>a) return 1;
+// });
+
+//* Sort Hand
+// let dataN = arr.sort((a,b)=>{
+//   // if(a>b) a-b; //ascend
+//   // if(a>b) b-a; //decend
+// });
 
 // let resdata =  reversenumwithoutCon(dataN);
-let resdata =  dataN;
-console.log('test', test)
-test.textContent = resdata;
+// let resdata =  dataN;
+// console.log('test', test)
+// test.textContent = resdata;
+
+
 
 /////////////////////////////////////////////////
