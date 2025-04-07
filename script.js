@@ -75,8 +75,9 @@ const displaymovements = function (movements) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${i + 1
-      } ${type}</div>
+          <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
           <div class="movements__value">${mov} 💶</div>
         </div>
       `;
@@ -107,67 +108,129 @@ const displaymovements = function (movements) {
   };
 };
 
-
-const displaySummary = (movements) => {
-  const resultValDep = movements.reduce((mov, cur) => (mov > 0) ? mov + cur : mov);
-  const resultValWithD = movements.reduce((mov, cur) => (mov < 0) ? mov + cur : mov);
-  const resultValWithInt = (movements.reduce((mov, cur, i, arr) => mov + cur)) / movements.length;
+const displaySummary = movements => {
+  const resultValDep = movements.reduce((mov, cur) =>
+    mov > 0 ? mov + cur : mov
+  );
+  const resultValWithD = movements.reduce((mov, cur) =>
+    mov < 0 ? mov + cur : mov
+  );
+  const resultValWithInt =
+    movements.reduce((mov, cur, i, arr) => mov + cur) / movements.length;
   labelSumIn.textContent = `${resultValDep} 💶`;
   labelSumOut.textContent = `${resultValWithD} 💶`;
   labelSumInterest.textContent = `${resultValWithInt} 💶`;
-
 };
 
-const calDisBalance = (movements) => {
+const calDisBalance = movements => {
   labelBalance.textContent = movements.reduce((mov, cur) => mov + cur);
+  return labelBalance.textContent;
 };
 
-// ----------Login Validation---------------------------
+//* ----------Login Validation------------
 let currentAccount;
 
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
-  currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value)
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
   console.log('currentAccount :>> ', currentAccount);
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     //Display UI and Message
-    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
     containerApp.style.opacity = 100;
 
     //Clear input fields
-    inputLoginUsername.value = inputLoginPin.value = "";
+    inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
-
-    //Display movements
-    displaymovements(currentAccount.movements);
-
-    //Display balance
-    calDisBalance(currentAccount.movements);
-
-    //Display summary
-    displaySummary(currentAccount.movements);
-
+    updateUI(currentAccount);
   }
-})
+});
 
-logOut.addEventListener('click',()=>{
+logOut.addEventListener('click', () => {
   containerApp.style.opacity = 0;
-  inputLoginUsername.value = inputLoginPin.value = "";
+  inputLoginUsername.value = inputLoginPin.value = '';
   inputLoginUsername.focus();
-})
+});
+//* -------------------------------------
 
-// -------------------------------------
+//* ----------------Transaction-----------
+btnTransfer.addEventListener('click', function (e) {
+  debugger;
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  console.log('receiverAcc :>> ', receiverAcc);
+  inputTransferAmount.value = inputTransferTo.value = ''; // Clear field
+  let calCurBalance = Number(calDisBalance(currentAccount.movements));
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    calCurBalance >= amount &&
+    currentAccount.username !== receiverAcc.username
+  ) {
+    //? Doing the transfer
+    currentAccount.movements.push(amount);
+    receiverAcc.movements.push(-amount);
+    //? Update UI
+    updateUI(currentAccount);
+  }
+});
+//* -------------------------------------
+//! ---------------Close Account ----------------------
+btnClose.addEventListener('click', function (e) {
+  debugger;
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    if (confirm('Are you sure you want to delete this account?')) {
+      const index = accounts.findIndex(
+        acc => acc.username === currentAccount.username
+      );
+      if (index !== -1) {
+        accounts.splice(index, 1); // delete account
+      }
+      containerApp.style.opacity = 100;
+    }
+  }
+  inputTransferAmount.value = inputTransferTo.value = ''; // Clear field
+});
 
+//! -------------------------------------
 
-////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
+//* ---------------Update UI---------------------
+function updateUI(acc) {
+  //Display movements
+  displaymovements(acc.movements);
 
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
+  //Display balance
+  calDisBalance(acc.movements);
+
+  //Display summary
+  displaySummary(acc.movements);
+}
+//* -------------------------------------
+//* ----------------Loan Section---------------------
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov > amount * 0.1)) {
+    //Add movement
+    currentAccount.movements.push(amount);
+
+    //Update UI
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+//* -------------------------------------
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const converate = 1.1;
@@ -175,5 +238,22 @@ const resultdata = movements.map(function (mov, i) {
   return mov * converate;
 });
 console.log('resultdata :>> ', resultdata);
+function converterCase() {
+  let titleSample = 'this is a title';
+  const excep = ['a', 'an', 'the', 'but'];
+  //expected :- 'This Is a Title';
+
+  let converter = titleSample
+    .toLowerCase()
+    .split(' ')
+    .map(element =>
+      element.includes(excep)
+        ? element
+        : element[0].toUpperCase() + element.slice(1)
+    );
+  return converter;
+}
+
+console.log('converter', converterCase());
 
 /////////////////////////////////////////////////

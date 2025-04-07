@@ -16,7 +16,7 @@ html {
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #444;
   background-color: #f3f3f3;
   height: 100vh;
@@ -59,7 +59,7 @@ nav {
 
 .login__input:focus {
   outline: none;
-  border: 1px solid #ccc;
+  border: 1px solid #39b385;
 }
 
 .login__input::placeholder {
@@ -263,7 +263,7 @@ h2 {
 
 .form__input:focus {
   outline: none;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: #eaeaea;
 }
 
 .form__label {
@@ -279,10 +279,23 @@ h2 {
   cursor: pointer;
   transition: all 0.3s;
 }
+.form__btn--arrow {
+  border: none;
+  border-radius: 0.7rem;
+  width: 60px;
+  font-size: 1.8rem;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.form__btn--arrow:focus {
+  border: 2px solid #39b385;
+}
 
 .form__btn:focus {
   outline: none;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: #c4d4ce;
 }
 
 .logout-timer {
